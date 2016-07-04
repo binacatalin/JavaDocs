@@ -103,8 +103,13 @@ public class MyHashMap {
      */
     public Collection<String> values() {
         // TODO Ana
-
-        return null;
+        LinkedList<String> list = new LinkedList<String>();
+        for (LinkedList<MyEntry> i : buckets) {
+            for (MyEntry entry : i) {
+                list.add(entry.getValue());
+            }
+        }
+        return list;
     }
 
     public String remove(String key) {
@@ -126,34 +131,65 @@ public class MyHashMap {
 
     public boolean containsKey(String key) {
         // TODO Jeni
+        for (LinkedList<MyEntry> i : buckets) {
+            for (MyEntry entry : i) {
+                if (entry.getKey().equals(key))
+                    return true;
+            }
+        }
         return false;
     }
 
     public boolean containsValue(String value) {
         // TODO Jeni
+        for (LinkedList<MyEntry> i : buckets) {
+            for (MyEntry entry : i) {
+                if (entry.getValue().equals(value))
+                    return true;
+            }
+        }
         return false;
     }
 
     public int size() {
         // TODO Return the number of the Entry objects stored in all the buckets
 //        Nicoleta
-        return 0;
+        int size = 0;
+        for (LinkedList bucket : buckets) {
+            size += bucket.size();
+        }
+        return size;
     }
 
     public void clear() {
         // TODO Remove all the Entry objects from the bucket list
 //        Nicoleta
+        for (LinkedList bucket : buckets) {
+            bucket.clear();
+        }
     }
 
     public Set<MyEntry> entrySet() {
         // TODO Return a Set containing all the Entry objects
 //        Nicoleta
-        return null;
+        Set<MyEntry> set = new LinkedHashSet<MyEntry>();
+        for (LinkedList bucket : buckets) {
+            set.addAll(bucket);
+        }
+        return set;
     }
 
     public boolean isEmpty() {
-        // TODO Jeni
-        return false;
+        int cnt = buckets.size();
+        for (LinkedList<MyEntry> i : buckets) {
+            if (i.isEmpty()) {
+                cnt--;
+            }
+        }
+        if (cnt == 0)
+            return true;
+        else
+            return false;
     }
 
     public static class MyEntry {
