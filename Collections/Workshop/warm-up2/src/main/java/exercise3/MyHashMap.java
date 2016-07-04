@@ -52,11 +52,23 @@ public class MyHashMap {
 
     public boolean containsKey(String key) {
         // TODO Jeni
+        for (LinkedList<MyEntry> i : buckets) {
+            for (MyEntry entry : i) {
+                if (entry.getKey().equals(key))
+                    return true;
+            }
+        }
         return false;
     }
 
     public boolean containsValue(String value) {
         // TODO Jeni
+        for (LinkedList<MyEntry> i : buckets) {
+            for (MyEntry entry : i) {
+                if (entry.getValue().equals(value))
+                    return true;
+            }
+        }
         return false;
     }
 
@@ -90,8 +102,16 @@ public class MyHashMap {
     }
 
     public boolean isEmpty() {
-        // TODO Jeni
-        return false;
+        int cnt = buckets.size();
+        for (LinkedList<MyEntry> i : buckets) {
+            if (i.isEmpty()) {
+                cnt--;
+            }
+        }
+        if (cnt == 0)
+            return true;
+        else
+            return false;
     }
 
     public static class MyEntry {
