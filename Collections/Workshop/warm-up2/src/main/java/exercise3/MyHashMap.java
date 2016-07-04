@@ -79,7 +79,6 @@ public class MyHashMap {
         for (LinkedList bucket : buckets) {
             size += bucket.size();
         }
-        System.out.println(size);
         return size;
     }
 
