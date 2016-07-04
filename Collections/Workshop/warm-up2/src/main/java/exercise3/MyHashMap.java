@@ -63,18 +63,30 @@ public class MyHashMap {
     public int size() {
         // TODO Return the number of the Entry objects stored in all the buckets
 //        Nicoleta
-        return 0;
+        int size = 0;
+        for (LinkedList bucket : buckets) {
+            size += bucket.size();
+        }
+        System.out.println(size);
+        return size;
     }
 
     public void clear() {
         // TODO Remove all the Entry objects from the bucket list
 //        Nicoleta
+        for (LinkedList bucket : buckets) {
+            bucket.clear();
+        }
     }
 
     public Set<MyEntry> entrySet() {
         // TODO Return a Set containing all the Entry objects
 //        Nicoleta
-        return null;
+        Set<MyEntry> set = new LinkedHashSet<MyEntry>();
+        for (LinkedList bucket : buckets) {
+            set.addAll(bucket);
+        }
+        return set;
     }
 
     public boolean isEmpty() {
