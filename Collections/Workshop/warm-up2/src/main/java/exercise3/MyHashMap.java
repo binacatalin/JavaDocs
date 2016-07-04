@@ -26,55 +26,59 @@ public class MyHashMap {
     }
 
     public String get(String key) {
-        // TODO
+        // TODO Catalin
         return null;
     }
 
     public void put(String key, String value) {
-        // TODO
+        // TODO Catalin
     }
 
     public Set<String> keySet() {
-        // TODO
+        // TODO Catalin
         return null;
     }
 
     public Collection<String> values() {
-        // TODO
+        // TODO Ana
         return null;
     }
 
     public String remove(String key) {
         // TODO Returns the value associated with the key removed from the map or null if the key wasn't found
+//        Ana
         return null;
     }
 
     public boolean containsKey(String key) {
-        // TODO
+        // TODO Jeni
         return false;
     }
 
     public boolean containsValue(String value) {
-        // TODO
+        // TODO Jeni
         return false;
     }
 
     public int size() {
         // TODO Return the number of the Entry objects stored in all the buckets
+//        Nicoleta
         return 0;
     }
 
     public void clear() {
         // TODO Remove all the Entry objects from the bucket list
+//        Nicoleta
     }
 
     public Set<MyEntry> entrySet() {
         // TODO Return a Set containing all the Entry objects
+//        Nicoleta
         return null;
     }
 
     public boolean isEmpty() {
-        // TODO
+        // TODO Jeni
         return false;
     }
 
