@@ -6,7 +6,7 @@ import java.util.*;
  * Exercise 3. Implement a HashMap from scratch. In order to pass all the tests
  * you need to implement all the methods defined below. The key-value pair will
  * be encapsulated in the MyHashMap.MyEntry object defined below.
- *
+ * <p>
  * The buckets list in which each MyEntry object will be stored is stored in "buckets" object.
  */
 public class MyHashMap {
@@ -20,25 +20,87 @@ public class MyHashMap {
 
         // Initialize buckets list
         buckets = new ArrayList<LinkedList<MyEntry>>();
-        for(Integer i = 0; i < capacity; i++) {
+        for (Integer i = 0; i < capacity; i++) {
             buckets.add(new LinkedList<MyEntry>());
         }
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     public String get(String key) {
         // TODO Catalin
+        int hashcode;
+
+        if (key == null)
+            hashcode = 0;
+        else
+            hashcode = Math.abs(key.hashCode()) % capacity;
+
+        LinkedList<MyEntry> list = buckets.get(hashcode);
+        if (list != null) {
+            for (MyEntry entry : list) {
+                if (entry.getKey().equals(key)) {
+                    return entry.getValue();
+                }
+            }
+        }
+
         return null;
     }
 
+    /**
+     *
+     * @param key
+     * @param value
+     */
     public void put(String key, String value) {
         // TODO Catalin
+        int hashcode;
+
+        if (key == null)
+            hashcode = 0;
+        else
+            hashcode = Math.abs(key.hashCode()) % capacity;
+
+        MyEntry entry = new MyEntry(key, value);
+
+        LinkedList<MyEntry> lst = buckets.get(hashcode);
+        int index;
+        if (lst != null)
+            index = lst.indexOf(entry);
+        else
+            return;
+
+        if (index < 0) {
+            buckets.get(hashcode).add(entry);
+        } else {
+            buckets.get(hashcode).set(index, entry);
+        }
     }
 
+    /**
+     *
+     * @return
+     */
     public Set<String> keySet() {
         // TODO Catalin
-        return null;
+        Set<String> ret = new LinkedHashSet<String>();
+
+        for (LinkedList<MyEntry> list : buckets) {
+            for (MyEntry entry : list) {
+                ret.add(entry.getKey());
+            }
+        }
+
+        return ret;
     }
 
+    /*
+    -------------------------------------------------------------------------------------------------------------
+     */
     public Collection<String> values() {
         // TODO Ana
         return null;
