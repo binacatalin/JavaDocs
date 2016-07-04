@@ -11,6 +11,8 @@ import java.util.*;
  */
 public class MyHashMap {
 
+    //FINAL
+
     private ArrayList<LinkedList<MyEntry>> buckets;
 
     private int capacity;
