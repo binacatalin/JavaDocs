@@ -103,76 +103,57 @@ public class MyHashMap {
      */
     public Collection<String> values() {
         // TODO Ana
+
         return null;
     }
 
     public String remove(String key) {
         // TODO Returns the value associated with the key removed from the map or null if the key wasn't found
-//        Ana
+        //int ceva = Math.abs(key.hashCode());
+       // LinkedList<MyEntry> list = buckets.get(ceva);
+        for (LinkedList<MyEntry> entry : buckets) {
+            for(MyEntry a: entry){
+                if (a.getKey().equals(key)){
+                    String s = new String(a.getValue());
+                    entry.remove(a);
+                    System.out.print(s);
+                    return s;
+                }
+            }
+        }
         return null;
     }
 
     public boolean containsKey(String key) {
         // TODO Jeni
-        for (LinkedList<MyEntry> i : buckets) {
-            for (MyEntry entry : i) {
-                if (entry.getKey().equals(key))
-                    return true;
-            }
-        }
         return false;
     }
 
     public boolean containsValue(String value) {
         // TODO Jeni
-        for (LinkedList<MyEntry> i : buckets) {
-            for (MyEntry entry : i) {
-                if (entry.getValue().equals(value))
-                    return true;
-            }
-        }
         return false;
     }
 
     public int size() {
         // TODO Return the number of the Entry objects stored in all the buckets
 //        Nicoleta
-        int size = 0;
-        for (LinkedList bucket : buckets) {
-            size += bucket.size();
-        }
-        return size;
+        return 0;
     }
 
     public void clear() {
         // TODO Remove all the Entry objects from the bucket list
 //        Nicoleta
-        for (LinkedList bucket : buckets) {
-            bucket.clear();
-        }
     }
 
     public Set<MyEntry> entrySet() {
         // TODO Return a Set containing all the Entry objects
 //        Nicoleta
-        Set<MyEntry> set = new LinkedHashSet<MyEntry>();
-        for (LinkedList bucket : buckets) {
-            set.addAll(bucket);
-        }
-        return set;
+        return null;
     }
 
     public boolean isEmpty() {
-        int cnt = buckets.size();
-        for (LinkedList<MyEntry> i : buckets) {
-            if (i.isEmpty()) {
-                cnt--;
-            }
-        }
-        if (cnt == 0)
-            return true;
-        else
-            return false;
+        // TODO Jeni
+        return false;
     }
 
     public static class MyEntry {
@@ -198,6 +179,19 @@ public class MyHashMap {
 
         public void setValue(String value) {
             this.value = value;
+        }
+
+        @Override
+        public int hashCode() {
+            return key.hashCode()+value.hashCode();
+        }
+
+
+
+        @Override
+        public boolean equals(Object obj) {
+            if(obj==null || this.getClass()!=obj.getClass()) return false;
+            return (this.key.equals(((MyEntry)obj).getKey()) && this.value.equals(((MyEntry)obj).getValue()));
         }
     }
 }
