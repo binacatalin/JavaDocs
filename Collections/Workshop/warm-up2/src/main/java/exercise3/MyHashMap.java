@@ -70,7 +70,7 @@ public class MyHashMap {
         MyEntry entry = new MyEntry(key, value);
 
         LinkedList<MyEntry> lst = buckets.get(hashcode);
-        int index;
+        int index = 0;
         if (lst != null)
             index = lst.indexOf(entry);
         else
@@ -228,7 +228,7 @@ public class MyHashMap {
 
         @Override
         public boolean equals(Object obj) {
-            if(obj==null || this.getClass()!=obj.getClass()) return false;
+            if(obj==null || this.getClass()!=obj.getClass() || this.getKey()==null || this.getValue()==null) return false;
             return (this.key.equals(((MyEntry)obj).getKey()) && this.value.equals(((MyEntry)obj).getValue()));
         }
     }
