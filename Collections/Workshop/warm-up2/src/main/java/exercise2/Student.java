@@ -1,5 +1,7 @@
 package exercise2;
 
+import java.sql.Struct;
+
 /**
  * Created by Radu.Hoaghe on 20.04.2015.
  */
@@ -35,35 +37,42 @@ public class Student {
     // TODO Exercise 2 a) Override the toString() method
     @Override
     public String toString() {
-        return "";
+        return firstName + " " + lastName + " " + id + " " + averageGrade;
     }
 
     // TODO Exercise 2 c) Override the equals() method
     @Override
     public boolean equals(Object o) {
         // TODO Exercise 2 c1) Check if the current instance is the same instance as the one from Object o
+        if (this == o)
+            return true;
 
         // TODO Exercise 2 c2) Check if Object o is null
-
         // TODO Exercise 2 c3) Check if Object o class type is the same as the current instance's type
+        if (o == null || o.getClass() != this.getClass())
+            return false;
 
         // TODO Exercise 2 c4) Now you know for sure that the Object o is of type Student so you
         // TODO need to cast it to a Student type object
+        Student student = (Student) o;
 
         // TODO Exercise 2 c5) Check if all the fields from Student class are equal to the ones from
         // TODO Exercise 2 c5) Object o (id, lastName, firstName, averageGrade)
+        if (student.id.equals(this.id) && student.averageGrade.equals(this.averageGrade) &&
+                student.firstName.equals(this.firstName) && student.lastName.equals(this.lastName))
+            return true;
 
         return false;
-
         // TODO Exercise 2 d) After you finished implementing equals method go to TODO Exercise 2 e) from Exercise2 class
     }
+
 
     // TODO Exercise 2 g) Override the hashCode() method
     // TODO Exercise 2 g) Hint: Don't forget to include in the hashCode result all the fields from
     // TODO Exercise 2 g) the Student class
     @Override
     public int hashCode() {
-        return 0;
+        return 31 * id.hashCode() + 17 * averageGrade.hashCode() + firstName.hashCode() + lastName.hashCode();
         // TODO Exercise 2 h) After you finished implementing hashCode go to TODO Exercise 2 i) from Exercise2 class
     }
 
