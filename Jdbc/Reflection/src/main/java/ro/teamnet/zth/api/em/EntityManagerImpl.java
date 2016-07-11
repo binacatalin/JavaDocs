@@ -272,6 +272,54 @@ public class EntityManagerImpl implements EntityManager {
      * @return
      */
     public <T> List<T> findByParams(Class<T> entityClass, Map<String, Object> params) {
-        return null;
+
+        QueryBuilder qb = new QueryBuilder();
+        ResultSet result = null;
+        ArrayList<T> array = new ArrayList<T>();
+
+        try (Connection conn = DBManager.getConnection()) {
+            String tableName = EntityUtils.getTableName(entityClass.getClass());
+            List<ColumnInfo> listColumns = EntityUtils.getColumns(entityClass.getClass());
+
+            for (ColumnInfo column : listColumns) {
+                Field field = entityClass.getClass().getDeclaredField(column.getColumnName());
+
+                field.setAccessible(true);
+
+                Object value = field.get(entityClass);
+
+                Condition cond = new Condition();
+                cond.setColumnName(column.getDbName());
+                cond.setValue(column.getValue());
+                qb.addCondition(cond);
+            }
+
+            qb.setTableName(tableName);
+            qb.setQueryType(QueryType.SELECT);
+
+            String query = qb.createQuery();
+            try (Statement stmt = conn.createStatement()) {
+                stmt.executeQuery(query);
+
+                while (result.next()) {
+                    T ceva = null;
+                    ceva = entityClass.newInstance();
+                    for (ColumnInfo elem : listColumns) {
+                        Field field = ceva.getClass().getDeclaredField(elem.getColumnName());
+                        field.setAccessible(true);
+                        field.set(ceva, EntityUtils.castFromSqlType(result.getObject(elem.getDbName()), field.getType()));
+                    }
+                    array.add(ceva);
+                }
+            } catch (SQLException | InstantiationException e) {
+                e.printStackTrace();
+            }
+
+
+        } catch (SQLException | IllegalAccessException | NoSuchFieldException ex) {
+            ex.printStackTrace();
+        }
+
+        return array;
     }
 }
