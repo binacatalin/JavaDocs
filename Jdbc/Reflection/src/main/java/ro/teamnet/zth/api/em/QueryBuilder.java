@@ -82,7 +82,7 @@ public class QueryBuilder {
             if (!isFirst) {
                 sql.append(",");
             }
-            sql.append(tableName + "." + columnInfo.getDbName());
+            sql.append(columnInfo.getDbName());
             isFirst = false;
         }
         sql.append(" from " + tableName);
