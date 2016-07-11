@@ -1,6 +1,7 @@
 package ro.teamnet.zth.api.em;
 
 import org.junit.Test;
+import ro.teamnet.zth.appl.domain.Department;
 
 import static org.junit.Assert.assertEquals;
 
@@ -16,8 +17,21 @@ public class EntityManagerImplTest {
      */
     public void testGetNextIdVal() {
         EntityManagerImpl emi = new EntityManagerImpl();
-        int res = emi.getNextIdVal("EMPLOYEES", "EMPLOYEE_ID");
-        assertEquals(207, res);
+        Long res = emi.getNextIdVal("EMPLOYEES", "EMPLOYEE_ID");
+        assertEquals((long)207, (long)res);
+    }
+
+    EntityManagerImpl manager = new EntityManagerImpl();
+
+    @Test
+    public void testGetTableNameMethod() {
+        Department d = new Department();
+        d.setDepartmentName("BlaBla");
+        //d.setLocation(1000l);
+        d.setId(278L);
+
+        Department res = (Department)(manager.insert(d));
+        assertEquals(d, res);
     }
 
 
