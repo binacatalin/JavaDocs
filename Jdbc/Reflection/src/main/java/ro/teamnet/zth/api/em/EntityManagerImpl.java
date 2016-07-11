@@ -199,6 +199,41 @@ public class EntityManagerImpl implements EntityManager {
      */
     public void delete(Object entity) {
 
+        Condition cond = new Condition();
+
+        try (Connection conn = DBManager.getConnection()) {
+            String tableName = EntityUtils.getTableName(entity.getClass());
+            List<ColumnInfo> listColumns = EntityUtils.getColumns(entity.getClass());
+
+            for (ColumnInfo column : listColumns) {
+                Field field = entity.getClass().getDeclaredField(column.getColumnName());
+
+                field.setAccessible(true);
+
+                Object value = field.get(entity);
+                column.setValue((EntityUtils.getSqlValue(value)));
+
+                if(column.isId()){
+                    cond.setColumnName(column.getDbName());
+                    cond.setValue(column.getValue());
+                }
+            }
+            QueryBuilder qb =  new QueryBuilder();
+            qb.setTableName(tableName);
+            qb.setQueryType(QueryType.DELETE);
+            qb.addCondition(cond);
+
+            String query = qb.createQuery();
+            try (Statement stmt = conn.createStatement()) {
+                stmt.executeQuery(query);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        } catch (SQLException | NoSuchFieldException | IllegalAccessException ex) {
+            ex.printStackTrace();
+        }
+
     }
 
 
