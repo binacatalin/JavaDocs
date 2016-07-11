@@ -278,15 +278,13 @@ public class EntityManagerImpl implements EntityManager {
         ArrayList<T> array = new ArrayList<T>();
 
         try (Connection conn = DBManager.getConnection()) {
-            String tableName = EntityUtils.getTableName(entityClass.getClass());
-            List<ColumnInfo> listColumns = EntityUtils.getColumns(entityClass.getClass());
+            String tableName = EntityUtils.getTableName(entityClass);
+            List<ColumnInfo> listColumns = EntityUtils.getColumns(entityClass);
 
             for (ColumnInfo column : listColumns) {
-                Field field = entityClass.getClass().getDeclaredField(column.getColumnName());
+                Field field = entityClass.getDeclaredField(column.getColumnName());
 
                 field.setAccessible(true);
-
-                Object value = field.get(entityClass);
 
                 Condition cond = new Condition();
                 cond.setColumnName(column.getDbName());
@@ -296,6 +294,7 @@ public class EntityManagerImpl implements EntityManager {
 
             qb.setTableName(tableName);
             qb.setQueryType(QueryType.SELECT);
+            qb.addQueryColumns(listColumns);
 
             String query = qb.createQuery();
             try (Statement stmt = conn.createStatement()) {

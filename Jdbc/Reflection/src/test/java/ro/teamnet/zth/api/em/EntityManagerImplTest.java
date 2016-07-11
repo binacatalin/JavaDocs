@@ -4,7 +4,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import ro.teamnet.zth.appl.domain.Department;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -73,6 +76,22 @@ public class EntityManagerImplTest {
 
         Department d1 = manager.findById(Department.class, d.getId());
         assertNull(d1.getId());
+    }
+
+    @Test
+    public void testFindByParams() {
+        EntityManagerImpl manager = new EntityManagerImpl();
+        Condition cond = new Condition();
+        cond.setColumnName("LOCATION_ID");
+        cond.setValue(1400L);
+
+        Department d = new Department();
+        d.setId(278L);
+
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put(cond.getColumnName(), cond.getValue());
+        List<Department> res = manager.findByParams(Department.class, params);
+        assertEquals(1, res.size());
     }
 
 }
