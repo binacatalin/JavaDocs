@@ -26,7 +26,7 @@ public class Department {
     private String departmentName;
 
     @Column(name = "LOCATION_ID")
-    private Location location;
+    private Long location;
 
     //    ------------------------------------------------------------------------------------------------------------------
 
@@ -76,11 +76,11 @@ public class Department {
         this.departmentName = departmentName;
     }
 
-    public Location getLocation() {
+    public Long getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(Long location) {
         this.location = location;
     }
 
