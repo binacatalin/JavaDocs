@@ -42,5 +42,11 @@ public class EntityManagerImplTest {
         assertEquals(d, res);
     }
 
+    @Test
+    public void testFindById() {
+        EntityManagerImpl entityManager = new EntityManagerImpl();
+        Department res = entityManager.findById(Department.class, (long) 10);
+        assertEquals("Administration", res.getDepartmentName());
+    }
 
 }

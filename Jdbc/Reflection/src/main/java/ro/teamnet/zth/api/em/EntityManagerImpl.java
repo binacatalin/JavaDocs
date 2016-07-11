@@ -1,6 +1,8 @@
 package ro.teamnet.zth.api.em;
 
+import ro.teamnet.zth.api.annotations.Id;
 import ro.teamnet.zth.api.database.DBManager;
+
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -39,14 +41,55 @@ public class EntityManagerImpl implements EntityManager {
 
     @Override
     public <T> T findById(Class<T> entityClass, Long id) {
-        return null;
+        Connection c = DBManager.getConnection();
+        QueryBuilder queryBuilder = new QueryBuilder();
+        String query;
+
+        String tableName = EntityUtils.getTableName(entityClass);
+        List<ColumnInfo> columns = EntityUtils.getColumns(entityClass);
+        List<Field> fields = EntityUtils.getFieldsByAnnotations(entityClass, Id.class);
+
+        String fieldName = ((Id)fields.get(0).getDeclaredAnnotation(Id.class)).name();
+        System.out.println(fields);
+        Condition cond = new Condition();
+        cond.setValue(id);
+        cond.setColumnName(fieldName);
+
+        queryBuilder.setTableName(tableName);
+        queryBuilder.setQueryType(QueryType.SELECT);
+        queryBuilder.addQueryColumns(columns);
+        queryBuilder.addCondition(cond);
+
+        query = queryBuilder.createQuery();
+        System.out.println(query);
+
+        Statement stmt = null;
+        try {
+            stmt = c.createStatement();
+            ResultSet resultSet = stmt.executeQuery(query);
+            T elem = entityClass.newInstance();
+            while (resultSet.next()) {
+                Field f;
+                for (ColumnInfo col : columns) {
+                    f = entityClass.getDeclaredField(col.getColumnName());
+                    f.setAccessible(true);
+                    f.set(elem, EntityUtils.castFromSqlType(resultSet.getObject(col.getDbName()), f.getType()));
+                }
+            }
+            return elem;
+        } catch (Exception e) {
+            System.out.println("cannot get the value");
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public <T> Object insert(T entity) { //Jeni
-        /* Create a connection to DB */;
+        /* Create a connection to DB */
+        ;
         long ii = 0L;
-        try(Connection conn = DBManager.getConnection()){
+        try (Connection conn = DBManager.getConnection()) {
             String tableName = EntityUtils.getTableName(entity.getClass());
             List<ColumnInfo> listColumns = EntityUtils.getColumns(entity.getClass());
             /* create a QueryBuilder object  in which you have to set the name of the table, columns, query type */
@@ -56,8 +99,7 @@ public class EntityManagerImpl implements EntityManager {
                 if (column.isId() == true) {
                     ii = getNextIdVal(tableName, column.getColumnName());
                     column.setValue(ii);
-                }
-                else {
+                } else {
                     Field field = entity.getClass().getDeclaredField(column.getColumnName());
                     field.setAccessible(true);
                     //column.setValue((ColumnInfo)(field.get(entity)));
@@ -73,20 +115,18 @@ public class EntityManagerImpl implements EntityManager {
             /* call createQuery() */
             String query = qb.createQuery();
             /* create a Statement object and execute the query */
-            try (Statement stmt = conn.createStatement( )){
+            try (Statement stmt = conn.createStatement()) {
                 stmt.executeQuery(query);
-            }
-            catch (SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
 
-        }catch(SQLException | NoSuchFieldException | IllegalAccessException ex){
+        } catch (SQLException | NoSuchFieldException | IllegalAccessException ex) {
             ex.printStackTrace();
         }
 
         return findById(entity.getClass(), ii);
     }
-
 
 
     @Override
@@ -110,7 +150,7 @@ public class EntityManagerImpl implements EntityManager {
 
         //create a resultSet object using Statement and execute the query obtained above
         ResultSet result = null;
-        try (Statement smtm = conn.createStatement()){
+        try (Statement smtm = conn.createStatement()) {
             result = smtm.executeQuery(res);
 
             //create an ArrayList of type T
@@ -124,13 +164,13 @@ public class EntityManagerImpl implements EntityManager {
            add the instance in ArrayList;
       */
 
-            while (result.next()){
+            while (result.next()) {
                 T ceva = null;
                 ceva = entityClass.newInstance();
-                for(ColumnInfo elem : list){
+                for (ColumnInfo elem : list) {
                     Field field = ceva.getClass().getDeclaredField(elem.getColumnName());
                     field.setAccessible(true);
-                    field.set(ceva,EntityUtils.castFromSqlType(result.getObject(elem.getDbName()),field.getType()));
+                    field.set(ceva, EntityUtils.castFromSqlType(result.getObject(elem.getDbName()), field.getType()));
                     //array.add(ceva);
                 }
                 array.add(ceva);
@@ -146,11 +186,17 @@ public class EntityManagerImpl implements EntityManager {
     }
 
     @Override
+    /*
+    TODO Ana
+    */
     public <T> T update(T entity) {
         return null;
     }
 
     @Override
+    /*
+    TODO Jeni
+     */
     public void delete(Object entity) {
 
     }
@@ -158,6 +204,7 @@ public class EntityManagerImpl implements EntityManager {
 
     @Override
     /**
+     * TODO Catalin
      * @author Catalin
      * @param entityClass
      * @param params
