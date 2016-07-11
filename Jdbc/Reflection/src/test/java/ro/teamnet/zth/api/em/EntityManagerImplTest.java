@@ -3,13 +3,21 @@ package ro.teamnet.zth.api.em;
 import org.junit.Test;
 import ro.teamnet.zth.appl.domain.Department;
 
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
 /**
  * Created by user on 7/8/2016.
  */
 public class EntityManagerImplTest {
+    @Test
+    public void testFindAll(){
+        EntityManagerImpl emi = new EntityManagerImpl();
+        List<Department> result = emi.findAll(Department.class);
+        assertEquals("Department should have 27 entries.", 27, result.size());
 
+    }
 
     @Test
     /**
