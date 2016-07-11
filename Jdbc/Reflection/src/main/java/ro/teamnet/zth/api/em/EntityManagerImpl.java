@@ -1,5 +1,6 @@
 package ro.teamnet.zth.api.em;
 
+import ro.teamnet.zth.api.annotations.Id;
 import ro.teamnet.zth.api.database.DBManager;
 
 import java.lang.reflect.Field;
