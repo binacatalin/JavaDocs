@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by user on 7/8/2016.
@@ -144,5 +145,26 @@ public class EntityManagerImpl implements EntityManager {
 
     }
 
+    @Override
+    public <T> T update(T entity) {
+        return null;
+    }
 
+    @Override
+    public void delete(Object entity) {
+
+    }
+
+
+    @Override
+    /**
+     * @author Catalin
+     * @param entityClass
+     * @param params
+     * @param <T>
+     * @return
+     */
+    public <T> List<T> findByParams(Class<T> entityClass, Map<String, Object> params) {
+        return null;
+    }
 }
