@@ -25,7 +25,7 @@ public class QueryBuilder {
      * Adauga o conditie la conditiile deja existente in interogare
      */
     public QueryBuilder addCondition(Condition condition) {
-        if (this.conditions == null) {
+        if (this.conditions == null){
             this.conditions = new ArrayList<>();
         }
         this.conditions.add(condition);
@@ -41,7 +41,7 @@ public class QueryBuilder {
      * Adauga o coloana la coloanele deja implicate in interogare
      */
     public QueryBuilder addQueryColumns(List<ColumnInfo> queryColumns) {
-        if (this.queryColumns == null) {
+        if (this.queryColumns == null){
             this.queryColumns = new ArrayList<>();
         }
         this.queryColumns.addAll(queryColumns);
@@ -58,7 +58,7 @@ public class QueryBuilder {
     * in functie de valoarea lui queryType
     */
     public String createQuery() {
-        if (QueryType.SELECT.equals(this.queryType)) {
+        if (QueryType.SELECT.equals(this.queryType)){
             return createSelectQuery();
         } else if (QueryType.INSERT.equals(this.queryType)) {
             return createInsertQuery();
@@ -78,18 +78,18 @@ public class QueryBuilder {
         StringBuilder sql = new StringBuilder();
         sql.append("select ");
         boolean isFirst = true;
-        for (ColumnInfo columnInfo : queryColumns) {
-            if (!isFirst) {
+        for(ColumnInfo columnInfo : queryColumns) {
+            if(!isFirst) {
                 sql.append(",");
             }
-            sql.append(columnInfo.getDbName());
+            sql.append(tableName + "." + columnInfo.getDbName());
             isFirst = false;
         }
         sql.append(" from " + tableName);
 
         boolean whereAdded = false;
-        if (conditions != null && !conditions.isEmpty()) {
-            for (Condition condition : conditions) {
+        if(conditions != null && !conditions.isEmpty()) {
+            for(Condition condition : conditions) {
                 sql.append(whereAdded ? " and" : " where ").append(condition.getColumnName()).append("=")
                         .append(getValueForQuery(condition.getValue()));
                 whereAdded = true;
@@ -106,7 +106,7 @@ public class QueryBuilder {
         StringBuilder sql = new StringBuilder();
         sql.append("delete from ").append(tableName);
         boolean whereAdded = false;
-        if (conditions != null && !conditions.isEmpty()) {
+        if (conditions != null  && !conditions.isEmpty()){
             for (Condition condition : conditions) {
                 sql.append(whereAdded ? " and" : " where ").append(condition.getColumnName()).append("=").append(getValueForQuery(condition.getValue()));
                 whereAdded = true;
@@ -135,7 +135,7 @@ public class QueryBuilder {
         }
 
         boolean whereAdded = false;
-        if (conditions != null && !conditions.isEmpty()) {
+        if (conditions != null  && !conditions.isEmpty()){
             for (Condition condition : conditions) {
                 sql.append(whereAdded ? " and" : " where ").append(condition.getColumnName()).append("=").append(getValueForQuery(condition.getValue()));
                 whereAdded = true;
@@ -154,6 +154,10 @@ public class QueryBuilder {
         StringBuilder sqlValues = new StringBuilder(" values (");
         boolean first = true;
         for (ColumnInfo columnInfo : queryColumns) {
+//            if (columnInfo.isId()) {
+////                continue;
+//                System.out.println("I am here");
+//            }
 
             if (!first) {
                 sql.append(",");
@@ -177,14 +181,14 @@ public class QueryBuilder {
     * intr-un format potrivit standardului SQL
     */
     private String getValueForQuery(Object value) {
-        if (value == null) {
+        if (value == null){
             return null;
         }
-        if (value instanceof String) {
+        if (value instanceof String){
             return "'" + value + "'";
-        } else if (value instanceof java.sql.Date) {
+        } else if (value instanceof java.sql.Date){
             DateFormat dateFormat = new SimpleDateFormat("mm/dd/yyyy");
-            return "TO_DATE('" + dateFormat.format((Date) value) + "','mm-dd-YYYY'";
+            return "TO_DATE('"+dateFormat.format((Date)value)+"','mm-dd-YYYY'";
         } else {
             return value.toString();
         }

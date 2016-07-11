@@ -49,7 +49,7 @@ public class EntityManagerImpl implements EntityManager {
         List<ColumnInfo> columns = EntityUtils.getColumns(entityClass);
         List<Field> fields = EntityUtils.getFieldsByAnnotations(entityClass, Id.class);
 
-        String fieldName = ((Id)fields.get(0).getDeclaredAnnotation(Id.class)).name();
+        String fieldName = ((Id) fields.get(0).getDeclaredAnnotation(Id.class)).name();
         System.out.println(fields);
         Condition cond = new Condition();
         cond.setValue(id);
@@ -64,10 +64,11 @@ public class EntityManagerImpl implements EntityManager {
         System.out.println(query);
 
         Statement stmt = null;
+        T elem;
         try {
             stmt = c.createStatement();
             ResultSet resultSet = stmt.executeQuery(query);
-            T elem = entityClass.newInstance();
+            elem = entityClass.newInstance();
             while (resultSet.next()) {
                 Field f;
                 for (ColumnInfo col : columns) {
@@ -76,12 +77,14 @@ public class EntityManagerImpl implements EntityManager {
                     f.set(elem, EntityUtils.castFromSqlType(resultSet.getObject(col.getDbName()), f.getType()));
                 }
             }
-            return elem;
+//            return elem;
         } catch (Exception e) {
             System.out.println("cannot get the value");
             e.printStackTrace();
             return null;
         }
+
+        return elem;
     }
 
     @Override
@@ -89,6 +92,8 @@ public class EntityManagerImpl implements EntityManager {
         /* Create a connection to DB */
         ;
         long ii = 0L;
+        List<ColumnInfo> lst = new ArrayList<>();
+
         try (Connection conn = DBManager.getConnection()) {
             String tableName = EntityUtils.getTableName(entity.getClass());
             List<ColumnInfo> listColumns = EntityUtils.getColumns(entity.getClass());
@@ -96,9 +101,10 @@ public class EntityManagerImpl implements EntityManager {
             QueryBuilder qb = new QueryBuilder();
 
             for (ColumnInfo column : listColumns) {
-                if (column.isId() == true) {
-                    ii = getNextIdVal(tableName, column.getColumnName());
+                if (column.isId()) {
+                    ii = getNextIdVal(tableName, column.getDbName());
                     column.setValue(ii);
+//                    lst.add(column);
                 } else {
                     Field field = entity.getClass().getDeclaredField(column.getColumnName());
                     field.setAccessible(true);
@@ -106,26 +112,32 @@ public class EntityManagerImpl implements EntityManager {
                     Object value = field.get(entity);
                     column.setValue((EntityUtils.getSqlValue(value)));
                 }
+                lst.add(column);
             }
             /* create a QueryBuilder object  in which you have to set the name of the table, columns, query type */
             //QueryBuilder qb = new QueryBuilder();
             qb.setTableName(tableName);
-            qb.addQueryColumns(listColumns);
+            qb.addQueryColumns(lst);
             qb.setQueryType(QueryType.INSERT);
             /* call createQuery() */
             String query = qb.createQuery();
             /* create a Statement object and execute the query */
-            try (Statement stmt = conn.createStatement()) {
+
+            System.out.println(lst);
+            System.out.println(query);
+            Statement stmt= conn.createStatement();
+//            try (Statement stmt = conn.createStatement()) {
                 stmt.executeQuery(query);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
 
         } catch (SQLException | NoSuchFieldException | IllegalAccessException ex) {
             ex.printStackTrace();
         }
-
-        return findById(entity.getClass(), ii);
+//        ...
+        Object ret = findById(entity.getClass(), ii);
+        return ret;
     }
 
 
