@@ -27,26 +27,8 @@ public class EntityManagerImpl implements EntityManager {
     public Integer getNextIdVal(String tableName, String columnIdName) {
         Connection connection = DBManager.getConnection();
         ResultSet res = null;
-        String sqlQuery = "";
-        QueryBuilder qb = new QueryBuilder();
+        String sqlQuery = "SELECT MAX(" + columnIdName + ") FROM " + tableName;
         Integer ret = -2;
-
-
-//        Conditia din query
-        Condition condition = new Condition();
-        condition.setColumnName(columnIdName);
-        List<ColumnInfo> columns, queryCol = new ArrayList<ColumnInfo>();
-
-        Class cls = tableName.getClass();
-        columns = EntityUtils.getColumns(Employee.class);
-        for (ColumnInfo ci : columns) {
-            if (ci.isId()) {
-                ci.setDbName("MAX(" + ci.getDbName() + ")");
-                queryCol.add(ci);
-                sqlQuery = qb.setQueryType(QueryType.SELECT).setTableName(tableName).addQueryColumns(queryCol).createQuery();
-                break;
-            }
-        }
 
         try (Statement stmt = connection.createStatement()) {
             res = stmt.executeQuery(sqlQuery);
