@@ -155,7 +155,8 @@ public class QueryBuilder {
         boolean first = true;
         for (ColumnInfo columnInfo : queryColumns) {
 //            if (columnInfo.isId()) {
-//                continue;
+////                continue;
+//                System.out.println("I am here");
 //            }
             if (!first) {
                 sql.append(",");

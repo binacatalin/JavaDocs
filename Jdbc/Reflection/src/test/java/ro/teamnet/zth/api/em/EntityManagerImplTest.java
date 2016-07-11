@@ -51,7 +51,7 @@ public class EntityManagerImplTest {
         d.setDepartmentName("BlaBla");
         d.setLocation(1000l);
 //        TODO valoarea id-ului din obiectul departament trebuie sa o iei din baza de date pentru ca se schimba la fiecare insert deci o sa pice testul pt ca nu e actuala
-        d.setId(274L);
+        d.setId(278L);
 
         Department res = (Department) (manager.insert(d));
         assertEquals(d.getId(), res.getId());
