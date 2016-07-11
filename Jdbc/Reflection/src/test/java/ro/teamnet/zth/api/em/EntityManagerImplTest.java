@@ -1,5 +1,6 @@
 package ro.teamnet.zth.api.em;
 
+import org.junit.Assert;
 import org.junit.Test;
 import ro.teamnet.zth.appl.domain.Department;
 
@@ -20,6 +21,19 @@ public class EntityManagerImplTest {
         assertEquals("Department should have 28 entries.", 28, result.size());
 
     }
+
+
+    @Test
+    public void testUpdate() {
+        EntityManagerImpl emi = new EntityManagerImpl();
+        Department d = emi.findById(Department.class, new Long(180));
+        d.setDepartmentName("testUpdate");
+        emi.update(d);
+        Assert.assertEquals("updated department_name='testUpdate'.",
+                    "testUpdate", emi.findById(Department.class, new Long(180)).getDepartmentName());
+        }
+
+
 
     @Test
     /**
