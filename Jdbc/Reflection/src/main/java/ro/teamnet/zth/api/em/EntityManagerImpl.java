@@ -1,11 +1,6 @@
 package ro.teamnet.zth.api.em;
 
-import ro.teamnet.zth.api.annotations.Column;
-import ro.teamnet.zth.api.annotations.Id;
 import ro.teamnet.zth.api.database.DBManager;
-import ro.teamnet.zth.appl.domain.Employee;
-
-
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.ResultSet;
