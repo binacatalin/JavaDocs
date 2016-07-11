@@ -189,9 +189,34 @@ public class EntityManagerImpl implements EntityManager {
     /*
     TODO Ana
     */
+
     public <T> T update(T entity) {
-        return null;
+
+        try (Connection conn = DBManager.getConnection();
+             Statement stmt = conn.createStatement()) {
+
+            String tableName = EntityUtils.getTableName(entity.getClass());
+            List<ColumnInfo> columns = EntityUtils.getColumns(entity.getClass());
+
+            for (ColumnInfo ci : columns) {
+                Field f = entity.getClass().getDeclaredField(ci.getColumnName());
+                f.setAccessible(true);
+                ci.setValue(EntityUtils.getSqlValue(f.get(entity)));
+            }
+            Condition c = new Condition();
+            c.setColumnName(columns.get(0).getDbName());
+            c.setValue(columns.get(0).getValue());
+            QueryBuilder qb = new QueryBuilder();
+            qb.setTableName(tableName).addQueryColumns(columns).addCondition(c).setQueryType(QueryType.UPDATE);
+            stmt.executeUpdate(qb.createQuery());
+
+            return entity;
+        } catch (SQLException | NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
+
 
     @Override
     /*
