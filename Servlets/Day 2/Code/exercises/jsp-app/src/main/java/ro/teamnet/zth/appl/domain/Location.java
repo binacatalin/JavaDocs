@@ -6,21 +6,21 @@ import ro.teamnet.zth.api.annotations.Table;
 
 @Table(name = "locations")
 public class Location {
-
     @Id(name = "location_id")
     private Integer id;
-
     @Column(name = "street_address")
     private String streetAddress;
-
     @Column(name = "postal_code")
     private String postalCode;
-
     @Column(name = "city")
     private String city;
-
     @Column(name = "state_province")
     private String stateProvince;
+
+    @Override
+    public String toString() {
+        return id + " " + city;
+    }
 
     public Integer getId() {
         return id;
