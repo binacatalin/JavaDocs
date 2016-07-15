@@ -1,7 +1,11 @@
 package ro.teamnet.zth;
 
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import ro.teamnet.zth.api.annotations.MyController;
 import ro.teamnet.zth.api.annotations.MyRequestMethod;
+import ro.teamnet.zth.api.annotations.MyRequestParam;
 import ro.teamnet.zth.appl.controller.DepartmentController;
 import ro.teamnet.zth.appl.controller.EmployeeController;
 import ro.teamnet.zth.fmk.AnnotationScanUtils;
@@ -15,6 +19,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.*;
 
 /**
@@ -24,6 +29,8 @@ public class MyDispatcherServlet extends HttpServlet {
     /**
      * key: urlPath
      * value: info abouth methiod
+     * modif chie ca sa mearga si DELETE, POST, ...
+     * Trebuie verificat tipul de request http
      */
     private Map<String, MethodAttributes> methodRegister;
 
@@ -56,16 +63,19 @@ public class MyDispatcherServlet extends HttpServlet {
     private void sendExceptionError(Exception e, HttpServletRequest req, HttpServletResponse resp) {
     }
 
-
     /**
      * @param dispatchResp
      * @param req
      * @param resp
      */
     private void reply(Object dispatchResp, HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
         PrintWriter pw = resp.getWriter();
-        pw.printf(dispatchResp.toString());
-}
+
+//        pw.printf(dispatchResp.toString());
+        objectMapper.writeValueAsString(dispatchResp);
+        pw.printf(objectMapper.writeValueAsString(dispatchResp));
+    }
 
     /**
      * @param req
@@ -75,6 +85,12 @@ public class MyDispatcherServlet extends HttpServlet {
     private Object dispatch(HttpServletRequest req, HttpServletResponse resp) {
         String pathInfo = req.getPathInfo();
         Object ret = "Hello";
+
+//        TODO
+        Long arg = null;
+        String val = req.getParameter("id");
+        if (val != null)
+            arg = Long.valueOf(val);
 
 ////        TODO - "/mvc" nu face parte din pathInfo
 ////        exemplu de path: "/mvc/employees"
@@ -92,17 +108,32 @@ public class MyDispatcherServlet extends HttpServlet {
             try {
                 Class<?> controllerClass = Class.forName(controllerName);
                 Object controllerInstance = controllerClass.newInstance();
-                Method method = controllerClass.getMethod(attribute.getMethodName());
-                return method.invoke(controllerInstance);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) {
+
+//                   use registerMethod
+                Method method = controllerClass.getMethod(attribute.getMethodName(), attribute.getParameterTypes());
+                Parameter[] parameters = method.getParameters();
+                List<Object> paramValueList = new ArrayList<>();
+                for (Parameter parameter : parameters) {
+                    if (parameter.isAnnotationPresent(MyRequestParam.class)) {
+                        MyRequestParam requestParam = parameter.getAnnotation(MyRequestParam.class);
+                        String name = requestParam.paramName();
+                        String reqParamValue = req.getParameter(name);
+                        Class<?> type = parameter.getType();
+
+                        Object reqParamObj = new ObjectMapper().readValue(reqParamValue, type);
+                        paramValueList.add(reqParamObj);
+                    }
+                }
+                return method.invoke(controllerInstance, paramValueList.toArray());
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
                 e.printStackTrace();
             } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (JsonParseException e) {
+                e.printStackTrace();
+            } catch (JsonMappingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -120,6 +151,11 @@ public class MyDispatcherServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 //        instructiuni de delegare
         dispatchReply("POST", req, resp);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        dispatchReply("DELETE", req, resp);
     }
 
     @Override
@@ -145,6 +181,7 @@ public class MyDispatcherServlet extends HttpServlet {
                             attribute.setControllerClass(controller.getName());
                             attribute.setMethodName(method.getName());
                             attribute.setMethodType(myRequestMethod.methodType());
+                            attribute.setParameterTypes(method.getParameterTypes());
 
                             methodRegister.put(urlPath, attribute);
                         }
