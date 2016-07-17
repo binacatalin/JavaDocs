@@ -1,5 +1,6 @@
 package ro.teamnet.zth.appl.controller;
 
+import com.google.gson.Gson;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.simple.JSONObject;
 import ro.teamnet.zth.api.annotations.MyController;
@@ -54,47 +55,37 @@ public class EmployeeController {
     // http://stackoverflow.com/questions/4308554/simplest-way-to-read-json-from-a-url-in-java
     // http://crunchify.com/how-to-read-json-object-from-file-in-java/
     // get json file from url in java
-    /*
-    private Long id;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String phoneNumber;
-    private Date hireDate;
-    private String jobId;
-    private BigDecimal salary;
-    private BigDecimal commissionPct;
-    private Long managerId;
-    private Long departmentId;
-    * */
+// maybe paramName = "employee.json"
     @MyRequestMethod(urlPath = "/save", methodType = "POST")
-    public Employee saveOneEmployee(@MyRequestParam(paramName = "employee") JSONObject jsonObj) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        Employee employee = new Employee();
+    public Employee saveOneEmployee(@MyRequestParam(paramName = "employee") JSONObject jsonObject) {
+//        ObjectMapper objectMapper = new ObjectMapper();
 
-        employee.setId(objectMapper.convertValue(jsonObj.get("id"), Long.class));
-        employee.setFirstName(objectMapper.convertValue(jsonObj.get("firstName"), String.class));
-        employee.setLastName(objectMapper.convertValue(jsonObj.get("lastName"), String.class));
-        employee.setEmail(objectMapper.convertValue(jsonObj.get("email"), String.class));
-        employee.setPhoneNumber(objectMapper.convertValue(jsonObj.get("phoneNumber"), String.class));
+        Gson gson = new Gson();
+        Employee employee = gson.fromJson(jsonObject.toJSONString(), Employee.class);
 
-        String hireDateString = objectMapper.convertValue(jsonObj.get("hireDate"), String.class);
-        DateFormat dateFormat = new SimpleDateFormat("DD-MM-YYYY");
-        Date hireDate = null;
-
-        try {
-            hireDate = (Date) dateFormat.parse(hireDateString);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        employee.setHireDate(hireDate);
-
-        employee.setJobId(objectMapper.convertValue(jsonObj.get("jobId"), String.class));
-        employee.setSalary(objectMapper.convertValue(jsonObj.get("salary"), BigDecimal.class));
-        employee.setCommissionPct(objectMapper.convertValue(jsonObj.get("commissionPct"), BigDecimal.class));
-        employee.setManagerId(objectMapper.convertValue(jsonObj.get("managerId"), Long.class));
-        employee.setDepartmentId(objectMapper.convertValue(jsonObj.get("departmentId"), Long.class));
+//        employee.setId(objectMapper.convertValue(jsonObj.get("id"), Long.class));
+//        employee.setFirstName(objectMapper.convertValue(jsonObj.get("firstName"), String.class));
+//        employee.setLastName(objectMapper.convertValue(jsonObj.get("lastName"), String.class));
+//        employee.setEmail(objectMapper.convertValue(jsonObj.get("email"), String.class));
+//        employee.setPhoneNumber(objectMapper.convertValue(jsonObj.get("phoneNumber"), String.class));
+//
+//        String hireDateString = objectMapper.convertValue(jsonObj.get("hireDate"), String.class);
+//        DateFormat dateFormat = new SimpleDateFormat("DD-MM-YYYY");
+//        Date hireDate = null;
+//
+//        try {
+//            hireDate = (Date) dateFormat.parse(hireDateString);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//
+//        employee.setHireDate(hireDate);
+//
+//        employee.setJobId(objectMapper.convertValue(jsonObj.get("jobId"), String.class));
+//        employee.setSalary(objectMapper.convertValue(jsonObj.get("salary"), BigDecimal.class));
+//        employee.setCommissionPct(objectMapper.convertValue(jsonObj.get("commissionPct"), BigDecimal.class));
+//        employee.setManagerId(objectMapper.convertValue(jsonObj.get("managerId"), Long.class));
+//        employee.setDepartmentId(objectMapper.convertValue(jsonObj.get("departmentId"), Long.class));
 
         return employeeService.saveEmployee(employee);
     }

@@ -121,6 +121,7 @@ public class MyDispatcherServlet extends HttpServlet {
                         Class<?> type = parameter.getType();
 
                         Object reqParamObj = new ObjectMapper().readValue(reqParamValue, type);
+                        new ObjectMapper().
                         paramValueList.add(reqParamObj);
                     }
                 }

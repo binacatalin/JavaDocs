@@ -1,5 +1,7 @@
 package ro.teamnet.zth.appl.controller;
 
+import com.google.gson.Gson;
+import org.json.simple.JSONObject;
 import ro.teamnet.zth.api.annotations.MyController;
 import ro.teamnet.zth.api.annotations.MyRequestMethod;
 import ro.teamnet.zth.api.annotations.MyRequestParam;
@@ -40,9 +42,9 @@ public class DepartmentController {
     }
 
     @MyRequestMethod(urlPath = "/save", methodType = "POST")
-    public Department saveOneDepartment(@MyRequestParam(paramName = "id") Long id) {
-        Department department = new Department();
-        department.setId(id);
+    public Department saveOneDepartment(@MyRequestParam(paramName = "department.json") JSONObject jsonObject) {
+        Gson gson = new Gson();
+        Department department = gson.fromJson(jsonObject.toJSONString(), Department.class);
 
         return departmentService.saveDepartment(department);
     }

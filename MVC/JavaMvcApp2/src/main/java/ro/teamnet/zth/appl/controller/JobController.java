@@ -1,5 +1,7 @@
 package ro.teamnet.zth.appl.controller;
 
+import com.google.gson.Gson;
+import org.json.simple.JSONObject;
 import ro.teamnet.zth.api.annotations.MyController;
 import ro.teamnet.zth.api.annotations.MyRequestMethod;
 import ro.teamnet.zth.api.annotations.MyRequestParam;
@@ -39,9 +41,9 @@ public class JobController {
     }
 
     @MyRequestMethod(urlPath = "/save", methodType = "POST")
-    public Job saveOneJob(@MyRequestParam(paramName = "id") Long id) {
-        Job job = new Job();
-        job.setId(id.toString());
+    public Job saveOneJob(@MyRequestParam(paramName = "id") JSONObject jsonObject) {
+        Gson gson = new Gson();
+        Job job = gson.fromJson(jsonObject.toJSONString(), Job.class);
 
         return jobService.saveJob(job);
     }

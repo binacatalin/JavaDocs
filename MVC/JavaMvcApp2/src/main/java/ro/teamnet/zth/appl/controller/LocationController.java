@@ -1,5 +1,7 @@
 package ro.teamnet.zth.appl.controller;
 
+import com.google.gson.Gson;
+import org.json.simple.JSONObject;
 import ro.teamnet.zth.api.annotations.MyController;
 import ro.teamnet.zth.api.annotations.MyRequestMethod;
 import ro.teamnet.zth.api.annotations.MyRequestParam;
@@ -40,9 +42,9 @@ public class LocationController {
     }
 
     @MyRequestMethod(urlPath = "/save", methodType = "POST")
-    public Location saveOneLocation(@MyRequestParam(paramName = "id") Long id) {
-        Location location = new Location();
-        location.setId(id);
+    public Location saveOneLocation(@MyRequestParam(paramName = "id") JSONObject jsonObject) {
+        Gson gson = new Gson();
+        Location location = gson.fromJson(jsonObject.toJSONString(), Location.class);
 
         return locationService.saveLocation(location);
     }
