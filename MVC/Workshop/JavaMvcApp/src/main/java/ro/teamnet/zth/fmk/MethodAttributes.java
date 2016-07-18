@@ -8,15 +8,6 @@ public class MethodAttributes {
     String controllerClass;
     String methodName;
     String methodType;
-    Class<?>[] parameterTypes;
-
-    public Class<?>[] getParameterTypes() {
-        return parameterTypes;
-    }
-
-    public void setParameterTypes(Class<?>[] parameterTypes) {
-        this.parameterTypes = parameterTypes.clone();
-    }
 
     public String getControllerClass() {
         return controllerClass;

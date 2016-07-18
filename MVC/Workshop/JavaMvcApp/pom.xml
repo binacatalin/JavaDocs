@@ -22,8 +22,7 @@
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc6</artifactId>
             <version>${ojdbc6.version}</version>
-            <!--nu imi ia date din baza-->
-            <!--<scope>provided</scope>-->
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -46,13 +45,6 @@
             <version>${javax.servlet-api.version}</version>
             <scope>provided</scope>
         </dependency>
-
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-jaxrs</artifactId>
-            <version>1.9.13</version>
-        </dependency>
-
     </dependencies>
 
     <build>
@@ -71,10 +63,9 @@
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
-                    <url>http://192.168.99.100:49100/manager/text</url>
+                    <url>http://docker.local:49100/manager/text</url>
                     <username>admin</username>
                     <password>admin</password>
-                    <port>8090</port>
                     <path>/app</path>
                 </configuration>
             </plugin>

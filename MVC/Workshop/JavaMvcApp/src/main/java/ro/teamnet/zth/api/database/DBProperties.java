@@ -5,12 +5,12 @@ package ro.teamnet.zth.api.database;
  */
 public interface DBProperties {
     //TODO de inlocuit cu IP-ul din Docker
-    String IP = "192.168.99.100";
+    String IP = "docker.local";
     String PORT = "49161";
     //TODO de inlocuit cu utilizatorul vostru
-    String USER = "catalin";
+    String USER = "oanam";
     //TODO de inlocuit cu parola voastra
-    String PASS = "catalin";
+    String PASS = "oanam";
     String SID = "xe";
     String DRIVER_CLASS = "oracle.jdbc.driver.OracleDriver";
 

@@ -6,13 +6,5 @@
     <display-name>Awesome MVC Framework</display-name>
 
     <!--Configurare servleti-->
-    <servlet>
-        <servlet-name>MyDispatcherServlet</servlet-name>
-        <servlet-class>ro.teamnet.zth.MyDispatcherServlet</servlet-class>
-        <description>MVC DispatcherServlet</description>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>MyDispatcherServlet</servlet-name>
-        <url-pattern>/mvc/*</url-pattern>
-    </servlet-mapping>
+
 </web-app>

@@ -1,0 +1,12 @@
+0:0:0:0:0:0:0:1 - - [18/Jul/2016:13:00:49 +0300] "GET /app HTTP/1.1" 302 - http-bio-8090-exec-1 0
+0:0:0:0:0:0:0:1 - - [18/Jul/2016:13:00:50 +0300] "GET /app/ HTTP/1.1" 200 52 http-bio-8090-exec-3 987
+0:0:0:0:0:0:0:1 - - [18/Jul/2016:13:00:51 +0300] "GET /app/ HTTP/1.1" 200 52 http-bio-8090-exec-4 2
+0:0:0:0:0:0:0:1 - - [18/Jul/2016:13:00:57 +0300] "GET /app/mvc/jobs/all HTTP/1.1" 200 1647 http-bio-8090-exec-6 1156
+0:0:0:0:0:0:0:1 - - [18/Jul/2016:13:04:09 +0300] "GET /app/mvc/jobs/all HTTP/1.1" 200 1647 http-bio-8090-exec-8 41
+0:0:0:0:0:0:0:1 - - [18/Jul/2016:13:04:15 +0300] "OPTIONS /app/mvc/jobs/save HTTP/1.1" 200 - http-bio-8090-exec-9 2
+0:0:0:0:0:0:0:1 - - [18/Jul/2016:13:04:15 +0300] "POST /app/mvc/jobs/save HTTP/1.1" 200 41 http-bio-8090-exec-10 150
+0:0:0:0:0:0:0:1 - - [18/Jul/2016:13:04:15 +0300] "GET /app/mvc/jobs/one?id=undefined HTTP/1.1" 200 4 http-bio-8090-exec-10 32
+0:0:0:0:0:0:0:1 - - [18/Jul/2016:13:04:18 +0300] "GET /app/mvc/jobs/all HTTP/1.1" 200 1710 http-bio-8090-exec-10 37
+0:0:0:0:0:0:0:1 - - [18/Jul/2016:13:04:22 +0300] "GET /app/mvc/jobs/one HTTP/1.1" 200 4 http-bio-8090-exec-10 31
+0:0:0:0:0:0:0:1 - - [18/Jul/2016:13:05:13 +0300] "GET /app/mvc/jobs/all HTTP/1.1" 200 1710 http-bio-8090-exec-10 45
+0:0:0:0:0:0:0:1 - - [18/Jul/2016:13:05:15 +0300] "GET /app/mvc/jobs/one HTTP/1.1" 200 4 http-bio-8090-exec-10 27
