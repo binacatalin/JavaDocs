@@ -2,6 +2,7 @@ package ro.teamnet.zth.appl.controller;
 
 import ro.teamnet.zth.api.annotations.MyController;
 import ro.teamnet.zth.api.annotations.MyRequestMethod;
+import ro.teamnet.zth.api.annotations.MyRequestObject;
 import ro.teamnet.zth.api.annotations.MyRequestParam;
 import ro.teamnet.zth.appl.domain.Location;
 import ro.teamnet.zth.appl.service.LocationService;
@@ -36,6 +37,22 @@ public class LocationController {
     public String deleteOneLocation(@MyRequestParam(paramName = "id") Long id) {
         locationService.deleteOneLocation(id);
         return "Delete done";
+    }
+
+    @MyRequestMethod(urlPath = "/edit", methodType = "PUT")
+    public String updateOneLocation(@MyRequestObject Location location) {
+        if (location != null)
+            return locationService.editLocation(location).toString();
+
+        return "Update faild";
+    }
+
+    @MyRequestMethod(urlPath = "/save", methodType = "POST")
+    public String saveOneLocation(@MyRequestObject Location location) {
+        if (location != null)
+            return locationService.saveLocation(location).toString();
+
+        return "Save faild";
     }
 }
 

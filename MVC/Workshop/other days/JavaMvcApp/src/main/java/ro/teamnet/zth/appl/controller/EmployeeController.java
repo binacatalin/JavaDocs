@@ -51,13 +51,18 @@ public class EmployeeController {
     }
 
     @MyRequestMethod(urlPath = "/save", methodType = "POST")
-    public Employee saveOneEmployee(@MyRequestParam(paramName = "id") Long id, @MyRequestParam(paramName = "firstName")
-            String firstName, @MyRequestParam(paramName = "lastName") String lastName) {
-        Employee employee = new Employee();
-        employee.setId(id);
-        employee.setFirstName(firstName);
-        employee.setLastName(lastName);
+    public String saveOneEmployee(Employee employee) {
+        if (employee != null)
+            return employeeService.saveEmployee(employee).toString();
 
-        return employeeService.saveEmployee(employee);
+        return "save faild";
+    }
+
+    @MyRequestMethod(urlPath = "/save", methodType = "POST")
+    public String updateOneEmployee(Employee employee) {
+        if (employee != null)
+            return employeeService.editEmployee(employee).toString();
+
+        return "update faild";
     }
 }

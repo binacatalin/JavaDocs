@@ -12,4 +12,5 @@ public interface LocationService {
     Location findOneLocation(Long id);
     void deleteOneLocation(Long id);
     Location saveLocation(Location location);
+    Location editLocation(Location location);
 }

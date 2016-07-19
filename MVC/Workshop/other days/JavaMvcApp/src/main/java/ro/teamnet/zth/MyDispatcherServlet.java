@@ -128,7 +128,7 @@ public class MyDispatcherServlet extends HttpServlet {
                         paramValueList.add(reqParamObj);
 
                     } else if (parameter.isAnnotationPresent(MyRequestObject.class)) {
-                        BufferedReader br = req.getReader();
+                        Reader br = req.getReader();
                         Object reqBody = new ObjectMapper().readValue(br, type);
 
                         paramValueList.add(reqBody);

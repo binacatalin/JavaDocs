@@ -1,6 +1,7 @@
 package ro.teamnet.zth.appl.controller;
 
 //import com.google.gson.Gson;
+
 import ro.teamnet.zth.api.annotations.MyController;
 import ro.teamnet.zth.api.annotations.MyRequestMethod;
 import ro.teamnet.zth.api.annotations.MyRequestObject;
@@ -44,11 +45,17 @@ public class JobController {
     @MyRequestMethod(urlPath = "/edit", methodType = "PUT")
     public String updateOneJob(@MyRequestObject Job job) {
 //        jobService.editJob(job);
-        return jobService.editJob(job).toString();
+        if (job != null)
+            return jobService.editJob(job).toString();
+
+        return "Update faild";
     }
 
     @MyRequestMethod(urlPath = "/save", methodType = "POST")
     public String saveOneJob(@MyRequestObject Job job) {
-        return jobService.saveJob(job).toString();
+        if (job != null)
+            return jobService.saveJob(job).toString();
+
+        return "Save faild";
     }
 }

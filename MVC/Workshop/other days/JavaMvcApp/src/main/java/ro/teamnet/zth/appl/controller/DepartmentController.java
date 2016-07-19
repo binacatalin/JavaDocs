@@ -2,6 +2,7 @@ package ro.teamnet.zth.appl.controller;
 
 import ro.teamnet.zth.api.annotations.MyController;
 import ro.teamnet.zth.api.annotations.MyRequestMethod;
+import ro.teamnet.zth.api.annotations.MyRequestObject;
 import ro.teamnet.zth.api.annotations.MyRequestParam;
 import ro.teamnet.zth.appl.domain.Department;
 import ro.teamnet.zth.appl.service.DepartmentService;
@@ -39,11 +40,20 @@ public class DepartmentController {
         return "Delete done";
     }
 
-//    @MyRequestMethod(urlPath = "/save", methodType = "POST")
-//    public Department saveOneDepartment(@MyRequestParam(paramName = "department.json") JSONObject jsonObject) {
-//        Gson gson = new Gson();
-//        Department department = gson.fromJson(jsonObject.toJSONString(), Department.class);
-//
-//        return departmentService.saveDepartment(department);
-//    }
+    @MyRequestMethod(urlPath = "/edit", methodType = "PUT")
+    public String updateOneDepartment(@MyRequestObject Department department) {
+//        jobService.editJob(job);
+        if (department != null)
+            return departmentService.editDepartment(department).toString();
+
+        return "Update faild";
+    }
+
+    @MyRequestMethod(urlPath = "/save", methodType = "POST")
+    public String saveOneJob(@MyRequestObject Department department) {
+        if (department != null)
+            return departmentService.saveDepartment(department).toString();
+
+        return "Save faild";
+    }
 }

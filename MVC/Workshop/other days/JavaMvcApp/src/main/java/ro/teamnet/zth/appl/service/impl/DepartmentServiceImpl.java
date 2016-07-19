@@ -31,4 +31,9 @@ public class DepartmentServiceImpl implements DepartmentService {
     public Department saveDepartment(Department department) {
         return departmentDao.insertDepartment(department);
     }
+
+    @Override
+    public Department editDepartment(Department department) {
+        return departmentDao.updateDepartment(department);
+    }
 }
