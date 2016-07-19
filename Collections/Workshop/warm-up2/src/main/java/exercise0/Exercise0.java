@@ -10,6 +10,9 @@ import java.util.Map;
  *          print all its elements.
  */
 public class Exercise0 {
+    private String myName = "Aloha";
+    private Integer myAge = 18;
+
 
     public Exercise0(){
 
